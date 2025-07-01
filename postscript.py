@@ -1,2 +1,3 @@
 # postscript.py
-print("✅ Postscript (Python): Hello from Python!")
+print(" Postscript (Python): Hello from Python!")
+
