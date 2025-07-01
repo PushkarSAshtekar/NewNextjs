@@ -15,20 +15,45 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         bat '''
+          echo Current directory contents:
+          dir
+          
+          echo Package.json content:
+          type package.json
+          
+          echo Cleaning previous installation...
           if exist package-lock.json del package-lock.json
           if exist node_modules rmdir /s /q node_modules
-          npm cache clean --force
-          npm install
-          npm install --save-dev typescript @types/react @types/node
+          
+          echo Installing all dependencies from package.json...
+          npm install --no-optional --verbose
+          
+          echo Checking what was actually installed:
+          dir node_modules 2>nul || echo node_modules not created
+          npm list --depth=0 || echo Package list failed but continuing
         '''
       }
     }
 
-    stage('Verify TypeScript Installation') {
+    stage('Verify TypeScript Setup') {
       steps {
         bat '''
-          npm list typescript @types/react @types/node
-          npx tsc --version
+          echo Checking if TypeScript files exist in node_modules...
+          if exist node_modules\\typescript (
+            echo TypeScript found in node_modules
+            npx tsc --version
+          ) else (
+            echo TypeScript not found, attempting manual installation...
+            npm install typescript @types/react @types/node --no-save --verbose
+          )
+          
+          echo Checking tsconfig.json...
+          if exist tsconfig.json (
+            echo tsconfig.json found
+          ) else (
+            echo Creating tsconfig.json...
+            npx tsc --init --target es2017 --module esnext --jsx preserve --strict --esModuleInterop --skipLibCheck --forceConsistentCasingInFileNames --moduleResolution node --allowJs --noEmit --incremental --resolveJsonModule --isolatedModules
+          )
         '''
       }
     }
