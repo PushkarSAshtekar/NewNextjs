@@ -38,6 +38,19 @@ pipeline {
   }
 
   post {
+     success {
+      echo '✅ Pipeline passed! Running postscript tasks...'
+
+      // Run Node.js script
+      bat 'node postscript.js'
+
+      // Run Python script
+      bat 'python postscript.py'
+    }
+
+    failure {
+      echo '❌ Pipeline failed!'
+    }
     always {
       cleanWs()
     }
