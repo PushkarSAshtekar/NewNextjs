@@ -12,13 +12,13 @@ pipeline {
       }
     }
 
-    stage('Prescript Check') {
-      steps {
-        echo '🔍 Running Prescript: Check versions'
-        bat 'node -v'
-        bat 'python --version'
-      }
-    }
+    // stage('Prescript Check') {
+    //   steps {
+    //     echo '🔍 Running Prescript: Check versions'
+    //     bat 'node -v'
+    //     bat 'python --version'
+    //   }
+    // }
 
     stage('Install Dependencies') {
       steps {
