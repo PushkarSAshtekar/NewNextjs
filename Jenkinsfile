@@ -12,21 +12,6 @@ pipeline {
       }
     }
 
-    // stage('Prescript Check') {
-    //   steps {
-    //     echo '🔍 Running Prescript: Check versions'
-    //     bat 'node -v'
-    //     bat 'python --version'
-    //   }
-    // }
-
-  stage('Prescript Check') {
-  steps {
-    echo '🔍 Running Prescript: Check versions'
-    bat 'node -v'
-    bat '"C:\\Users\\YourName\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" scripts\\prescript.py'
-  }
-}
     stage('Install Dependencies') {
       steps {
         bat 'npm install'
@@ -62,10 +47,10 @@ pipeline {
       echo '✅ Pipeline passed! Running postscript tasks...'
 
       // Run Node.js script
-      bat 'node postscript.js'
+      bat 'node scripts\\postscript.js'
 
       // Run Python script
-      bat 'python postscript.py'
+      bat 'python scripts\\postscript.py'
     }
 
     failure {
