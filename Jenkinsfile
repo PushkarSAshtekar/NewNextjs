@@ -8,7 +8,15 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        echo 'Repository will be cloned by Jenkins'
+        git branch: 'main', url: 'https://github.com/PushkarSAshtekar/mytestapp.git'
+      }
+    }
+
+    stage('Prescript Check') {
+      steps {
+        echo '🔍 Running Prescript: Check versions'
+        bat 'node -v'
+        bat 'python --version'
       }
     }
 
@@ -20,24 +28,43 @@ pipeline {
 
     stage('Install Playwright Browsers') {
       steps {
-        bat 'npx playwright install'
+        bat '''
+          mkdir "%APPDATA%\\npm" 2>nul || echo npm dir exists
+          npm config set cache "%TEMP%\\npm-cache"
+          npx playwright install
+        '''
       }
     }
 
     stage('Build App') {
       steps {
-        bat 'npm run build || echo "Skipping build due to missing TypeScript config or not needed."'
+        bat 'npm run build'
       }
     }
 
     stage('Run Tests') {
       steps {
-        bat 'npx playwright test'
+        echo '🧪 Running Playwright Tests...'
+        bat 'npm run test'
       }
     }
   }
 
   post {
+    success {
+      echo '✅ Pipeline passed! Running postscript tasks...'
+
+      // Run Node.js script
+      bat 'node postscript.js'
+
+      // Run Python script
+      bat 'python postscript.py'
+    }
+
+    failure {
+      echo '❌ Pipeline failed!'
+    }
+
     always {
       cleanWs()
     }
