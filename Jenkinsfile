@@ -42,10 +42,12 @@ pipeline {
       echo '✅ Pipeline passed! Running postscript tasks...'
 
       // Run Node.js script
-      bat 'node postscript.js'
+      // bat 'node postscript.js'
+       bat 'node "C:\\Cucumber js pratice\\NewNextjs\\my-app\\postscript.js"'
 
       // Run Python script
-      bat 'python postscript.py'
+      // bat 'python postscript.py'
+       bat 'python "C:\\Cucumber js pratice\\NewNextjs\\my-app\\postscript.py"'
     }
 
     failure {
