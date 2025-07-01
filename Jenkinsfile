@@ -12,27 +12,31 @@ pipeline {
       }
     }
 
-    // stage('Install Dependencies') {
-    //   steps {
-    //     bat 'npm install'
-    //     bat 'npm install --save-dev typescript @types/react @types/node'
-    //   }
-    // }
+    stage('Install Dependencies') {
+      steps {
+        bat '''
+          if exist package-lock.json del package-lock.json
+          if exist node_modules rmdir /s /q node_modules
+          npm cache clean --force
+          npm install
+          npm install --save-dev typescript @types/react @types/node
+        '''
+      }
+    }
 
-stage('Install Dependencies') {
-  steps {
-    bat '''
-      del package-lock.json 2>nul
-      rmdir /s /q node_modules 2>nul
-      npm install
-      npm install --save-dev typescript @types/react @types/node
-    '''
-  }
-}
+    stage('Verify TypeScript Installation') {
+      steps {
+        bat '''
+          npm list typescript @types/react @types/node
+          npx tsc --version
+        '''
+      }
+    }
+
     stage('Install Playwright Browsers') {
       steps {
         bat '''
-          mkdir "%APPDATA%\\npm" 2>nul || echo npm dir exists
+          if not exist "%APPDATA%\\npm" mkdir "%APPDATA%\\npm"
           npm config set cache "%TEMP%\\npm-cache"
           npx playwright install
         '''
@@ -60,7 +64,7 @@ stage('Install Dependencies') {
       // Run Node.js script
       bat 'node scripts\\postscript.js'
 
-      // Run Python script
+      // Run Python script (using python from PATH)
       bat 'python scripts\\postscript.py'
     }
 
