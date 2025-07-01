@@ -12,13 +12,23 @@ pipeline {
       }
     }
 
-    stage('Install Dependencies') {
-      steps {
-        bat 'npm install'
-        bat 'npm install --save-dev typescript @types/react @types/node'
-      }
-    }
+    // stage('Install Dependencies') {
+    //   steps {
+    //     bat 'npm install'
+    //     bat 'npm install --save-dev typescript @types/react @types/node'
+    //   }
+    // }
 
+stage('Install Dependencies') {
+  steps {
+    bat '''
+      del package-lock.json 2>nul
+      rmdir /s /q node_modules 2>nul
+      npm install
+      npm install --save-dev typescript @types/react @types/node
+    '''
+  }
+}
     stage('Install Playwright Browsers') {
       steps {
         bat '''
