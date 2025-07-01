@@ -1,4 +1,4 @@
-pipeline {
+\pipeline {
   agent any
 
   environment {
@@ -15,6 +15,7 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         bat 'npm install'
+        bat 'npm install --save-dev typescript @types/react @types/node'
       }
     }
 
