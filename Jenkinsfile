@@ -47,7 +47,7 @@ pipeline {
 
       // Run Python script
       // bat 'python postscript.py'
-       bat 'python "C:\\Cucumber js pratice\\NewNextjs\\my-app\\postscript.py"'
+       bat '"C:\\Program Files\\Python313\\python.exe" "C:\\Cucumber js pratice\\NewNextjs\\my-app\\postscript.py"'
     }
 
     failure {
