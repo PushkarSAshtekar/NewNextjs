@@ -20,6 +20,13 @@ pipeline {
     //   }
     // }
 
+  stage('Prescript Check') {
+  steps {
+    echo '🔍 Running Prescript: Check versions'
+    bat 'node -v'
+    bat '"C:\\Users\\YourName\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" scripts\\prescript.py'
+  }
+}
     stage('Install Dependencies') {
       steps {
         bat 'npm install'
