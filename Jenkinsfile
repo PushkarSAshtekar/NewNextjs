@@ -1,3 +1,5 @@
+
+
 pipeline {
   agent any
 
@@ -49,6 +51,23 @@ pipeline {
     stage('Run Tests') {
       steps {
         bat 'npx playwright test'
+      }
+    }
+
+    stage('Start App with PM2') {
+      steps {
+        bat '''
+          echo 🔁 Restarting app with PM2...
+
+          rem Optional: Delete previous instance
+          pm2 delete next-app || echo "No previous PM2 process"
+
+          rem Start using ecosystem config (make sure it's in project root)
+          pm2 start ecosystem.config.js
+
+          rem Save PM2 process list
+          pm2 save
+        '''
       }
     }
   }
