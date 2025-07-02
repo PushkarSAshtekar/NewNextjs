@@ -1,11 +1,10 @@
-
-
 pipeline {
   agent any
 
   environment {
     NODE_ENV = 'production'
     PYTHON_EXE = 'C:\\Program Files\\Python313\\python.exe'
+    PM2_CMD = 'C:\\Users\\pusht\\AppData\\Roaming\\npm\\pm2.cmd'
   }
 
   stages {
@@ -54,19 +53,19 @@ pipeline {
       }
     }
 
-    stage('Start App with PM2') {
+    stage('Restart App with PM2') {
       steps {
         bat '''
           echo 🔁 Restarting app with PM2...
 
-          rem Optional: Delete previous instance
-          pm2 delete next-app || echo "No previous PM2 process"
+          rem Delete previous instance
+          "%PM2_CMD%" delete next-app || echo "No previous PM2 process"
 
-          rem Start using ecosystem config (make sure it's in project root)
-          pm2 start ecosystem.config.js
+          rem Start using ecosystem config
+          "%PM2_CMD%" start ecosystem.config.js
 
           rem Save PM2 process list
-          pm2 save
+          "%PM2_CMD%" save
         '''
       }
     }
